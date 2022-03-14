@@ -166,3 +166,30 @@ counter:
     name: Errors
     icon: mdi:alert  
 ```
+### Set counter value with counter.configure, using a template
+```yaml
+# example
+- id: '1631078145572'
+  alias: counters weekly reset coffee and washing
+  description: ''
+  trigger:
+  - platform: time
+    at: 00:00
+  condition:
+  - condition: time
+    weekday:
+    - mon
+  action:
+  - service: counter.configure
+    data:
+      value: '{{ states (''counter.washing_counter_week'') | int }}'
+    target:
+      entity_id: counter.washing_counter_last_week
+  - service: counter.reset
+    target:
+      entity_id:
+      - counter.coffee_counter_week
+      - counter.washing_counter_week
+    data: {}
+  mode: single
+```
